@@ -31,6 +31,7 @@ namespace AppDevGCD1104.Controllers
             {
                 _dbContext.Categories.Add(category);
                 _dbContext.SaveChanges();
+				TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
 			return View();
@@ -56,6 +57,7 @@ namespace AppDevGCD1104.Controllers
 			{
 				_dbContext.Categories.Update(category);
 				_dbContext.SaveChanges();
+				TempData["success"] = "Category edited successfully";
 				return RedirectToAction("Index");
 			}
 			return View();
@@ -79,7 +81,8 @@ namespace AppDevGCD1104.Controllers
 
 				_dbContext.Categories.Remove(category);
 				_dbContext.SaveChanges();
-				return RedirectToAction("Index");
+			TempData["success"] = "Category deleted successfully";
+			return RedirectToAction("Index");
 		}
 
 	}
