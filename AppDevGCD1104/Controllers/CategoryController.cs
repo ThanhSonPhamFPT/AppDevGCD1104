@@ -1,19 +1,21 @@
 ﻿using AppDevGCD1104.Data;
 using AppDevGCD1104.Models;
+using AppDevGCD1104.Repository;
+using AppDevGCD1104.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppDevGCD1104.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDBContext _dbContext;
-        public CategoryController(ApplicationDBContext dbContext)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            _dbContext = dbContext;
+            _categoryRepository = categoryRepository;
         }
         public IActionResult Index()
         {
-            List<Category> myList = _dbContext.Categories.ToList();
+            List<Category> myList = _categoryRepository.GetAll().ToList();
             return View(myList);
         }
         public IActionResult Create()
@@ -29,8 +31,8 @@ namespace AppDevGCD1104.Controllers
             }
             if(ModelState.IsValid)
             {
-                _dbContext.Categories.Add(category);
-                _dbContext.SaveChanges();
+                _categoryRepository.Add(category);
+                _categoryRepository.Save();
 				TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
@@ -42,7 +44,7 @@ namespace AppDevGCD1104.Controllers
             {
                 return NotFound();
             }
-            Category? category = _dbContext.Categories.Find(id);
+            Category? category = _categoryRepository.Get(c=>c.Id==id);
             if (category == null)
             {
                 return NotFound();
@@ -55,8 +57,8 @@ namespace AppDevGCD1104.Controllers
 			
 			if (ModelState.IsValid)
 			{
-				_dbContext.Categories.Update(category);
-				_dbContext.SaveChanges();
+				_categoryRepository.Update(category);
+				_categoryRepository.Save();
 				TempData["success"] = "Category edited successfully";
 				return RedirectToAction("Index");
 			}
@@ -68,7 +70,7 @@ namespace AppDevGCD1104.Controllers
 			{
 				return NotFound();
 			}
-			Category? category = _dbContext.Categories.Find(id);
+			Category? category = _categoryRepository.Get(c => c.Id == id);
 			if (category == null)
 			{
 				return NotFound();
@@ -79,8 +81,8 @@ namespace AppDevGCD1104.Controllers
 		public IActionResult Delete(Category category)
 		{
 
-				_dbContext.Categories.Remove(category);
-				_dbContext.SaveChanges();
+				_categoryRepository.Delete(category);
+				_categoryRepository.Save();
 			TempData["success"] = "Category deleted successfully";
 			return RedirectToAction("Index");
 		}
