@@ -1,0 +1,20 @@
+﻿@model Category
+<h1>Edit a category</h1>
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="mb-3 row">
+            <label asp-for="Name"></label>
+            <input disabled asp-for="Name">
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Description"></label>
+            <input disabled asp-for="Description">
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="DisplayOrder"></label>
+            <input disabled asp-for="DisplayOrder">
+        </div>
+        <button type="submit" class="btn btn-primary">Delete</button>
+        <a asp-controller="Category" asp-action="Index" class="btn btn-primary">Back to List</a>
+    </div>
+</form>
