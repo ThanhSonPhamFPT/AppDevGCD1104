@@ -8,14 +8,14 @@ namespace AppDevGCD1104.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork UnitOfWork)
         {
-            _categoryRepository = categoryRepository;
+            _unitOfWork = UnitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> myList = _categoryRepository.GetAll().ToList();
+            List<Category> myList = _unitOfWork.CategoryRepository.GetAll().ToList();
             return View(myList);
         }
         public IActionResult Create()
@@ -31,8 +31,8 @@ namespace AppDevGCD1104.Controllers
             }
             if(ModelState.IsValid)
             {
-                _categoryRepository.Add(category);
-                _categoryRepository.Save();
+                _unitOfWork.CategoryRepository.Add(category);
+                _unitOfWork.Save();
 				TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
@@ -44,7 +44,7 @@ namespace AppDevGCD1104.Controllers
             {
                 return NotFound();
             }
-            Category? category = _categoryRepository.Get(c=>c.Id==id);
+            Category? category = _unitOfWork.CategoryRepository.Get(c=>c.Id==id);
             if (category == null)
             {
                 return NotFound();
@@ -57,8 +57,8 @@ namespace AppDevGCD1104.Controllers
 			
 			if (ModelState.IsValid)
 			{
-				_categoryRepository.Update(category);
-				_categoryRepository.Save();
+				_unitOfWork.CategoryRepository.Update(category);
+				_unitOfWork.CategoryRepository.Save();
 				TempData["success"] = "Category edited successfully";
 				return RedirectToAction("Index");
 			}
@@ -70,7 +70,7 @@ namespace AppDevGCD1104.Controllers
 			{
 				return NotFound();
 			}
-			Category? category = _categoryRepository.Get(c => c.Id == id);
+			Category? category = _unitOfWork.CategoryRepository.Get(c => c.Id == id);
 			if (category == null)
 			{
 				return NotFound();
@@ -81,8 +81,8 @@ namespace AppDevGCD1104.Controllers
 		public IActionResult Delete(Category category)
 		{
 
-				_categoryRepository.Delete(category);
-				_categoryRepository.Save();
+			_unitOfWork.CategoryRepository.Delete(category);
+			_unitOfWork.Save();
 			TempData["success"] = "Category deleted successfully";
 			return RedirectToAction("Index");
 		}

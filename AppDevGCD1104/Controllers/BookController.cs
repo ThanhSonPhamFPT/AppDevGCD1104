@@ -1,4 +1,6 @@
 ﻿using AppDevGCD1104.Models;
+using AppDevGCD1104.Models.ViewModels;
+using AppDevGCD1104.Repository;
 using AppDevGCD1104.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,19 +8,28 @@ namespace AppDevGCD1104.Controllers
 {
     public class BookController : Controller
     {
-		private readonly IBookRepository _BookRepository;
-		public BookController(IBookRepository BookRepository)
+		private readonly IUnitOfWork _unitOfWork;
+		public BookController(IUnitOfWork unitOfWork)
 		{
-			_BookRepository = BookRepository;
+			_unitOfWork = unitOfWork;
 		}
 		public IActionResult Index()
 		{
-			List<Book> myList = _BookRepository.GetAll().ToList();
+			List<Book> myList = _unitOfWork.BookRepository.GetAll().ToList();
 			return View(myList);
 		}
 		public IActionResult Create()
 		{
-			return View();
+			BookVM bookVM = new BookVM()
+			{
+				Categories = _unitOfWork.CategoryRepository.GetAll().Select(c=>new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
+				{
+					Text = c.Name,
+					Value = c.Id.ToString(),
+				}),
+				Book = new Book()
+			};
+			return View(bookVM);
 		}
 		[HttpPost]
 		public IActionResult Create(Book Book)
@@ -26,8 +37,8 @@ namespace AppDevGCD1104.Controllers
 
 			if (ModelState.IsValid)
 			{
-				_BookRepository.Add(Book);
-				_BookRepository.Save();
+				_unitOfWork.BookRepository.Add(Book);
+                _unitOfWork.BookRepository.Save();
 				TempData["success"] = "Book created successfully";
 				return RedirectToAction("Index");
 			}
@@ -39,7 +50,7 @@ namespace AppDevGCD1104.Controllers
 			{
 				return NotFound();
 			}
-			Book? Book = _BookRepository.Get(c => c.Id == id);
+			Book? Book = _unitOfWork.BookRepository.Get(c => c.Id == id);
 			if (Book == null)
 			{
 				return NotFound();
@@ -52,8 +63,8 @@ namespace AppDevGCD1104.Controllers
 
 			if (ModelState.IsValid)
 			{
-				_BookRepository.Update(Book);
-				_BookRepository.Save();
+                _unitOfWork.BookRepository.Update(Book);
+                _unitOfWork.Save();
 				TempData["success"] = "Book edited successfully";
 				return RedirectToAction("Index");
 			}
@@ -65,7 +76,7 @@ namespace AppDevGCD1104.Controllers
 			{
 				return NotFound();
 			}
-			Book? Book = _BookRepository.Get(c => c.Id == id);
+			Book? Book = _unitOfWork.BookRepository.Get(c => c.Id == id);
 			if (Book == null)
 			{
 				return NotFound();
@@ -76,8 +87,8 @@ namespace AppDevGCD1104.Controllers
 		public IActionResult Delete(Book Book)
 		{
 
-			_BookRepository.Delete(Book);
-			_BookRepository.Save();
+            _unitOfWork.BookRepository.Delete(Book);
+            _unitOfWork.Save();
 			TempData["success"] = "Book deleted successfully";
 			return RedirectToAction("Index");
 		}
