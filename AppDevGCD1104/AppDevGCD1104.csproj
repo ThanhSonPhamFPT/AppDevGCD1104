@@ -15,4 +15,29 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Book\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Book\Create.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Book\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Book\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Book\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Book\Delete.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Book\Edit.cshtml" />
+  </ItemGroup>
+
 </Project>
