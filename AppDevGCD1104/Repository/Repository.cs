@@ -14,14 +14,23 @@ namespace AppDevGCD1104.Repository
 			_dbContext = dbContext;
 			_dbSet =_dbContext.Set<T>();
 		}
-		public IEnumerable<T> GetAll()
+		public IEnumerable<T> GetAll(string? includedProperty = null)
 		{
-			return _dbSet.ToList();
+            IQueryable<T> query = _dbSet;
+            if (!String.IsNullOrEmpty(includedProperty))
+            {
+                query.Include(includedProperty).ToList();
+            }
+            return query.ToList();
 		}
-		public T Get(Expression<Func<T, bool>> predicate)
+		public T Get(Expression<Func<T, bool>> predicate, string? includedProperty = null)
 		{
 			IQueryable<T> query = _dbSet;
 			query = query.Where(predicate);
+			if (!String.IsNullOrEmpty(includedProperty)) 
+			{
+				query.Include(includedProperty).ToList();
+			}
 			return query.FirstOrDefault();
 		}
 		public void Add(T entity)
