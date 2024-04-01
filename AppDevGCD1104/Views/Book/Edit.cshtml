@@ -1,7 +1,9 @@
 ﻿@model BookVM
 <h1>Edit a category</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="border p-3 mt-4">
+       @*   <input hidden asp-for="Book.Id"/> *@
+        <input hidden asp-for="Book.ImageUrl" />
         <div class="mb-3 row">
             <label asp-for="Book.Title"></label>
             <input asp-for="Book.Title">
@@ -26,6 +28,13 @@
             <label asp-for="Book.Category"></label>
             <select asp-for="Book.CategoryId" asp-items="@Model.Categories">
             </select>
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Book.ImageUrl"></label>
+            <input type="file" name="file" class="form-control">
+        </div>
+        <div class="col-2">
+            <img src="@Model.Book.ImageUrl" width="100%" />
         </div>
         <button type="submit" class="btn btn-primary">Edit</button>
         <a asp-controller="Book" asp-action="Index" class="btn btn-primary">Back to List</a>

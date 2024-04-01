@@ -1,6 +1,6 @@
 ﻿@model BookVM
 <h1>Create a Book</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="border p-3 mt-4">
         <div class="mb-3 row">
             <label asp-for="Book.Title"></label>
@@ -26,6 +26,10 @@
             <label asp-for="Book.Category"></label>
             <select asp-for="Book.CategoryId" asp-items="@Model.Categories">
                 </select>
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="Book.ImageUrl"></label>
+            <input type = "file" name = "file" class="form-control">
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
         <a asp-controller="Book" asp-action="Index" class="btn btn-primary">Back to List</a>
