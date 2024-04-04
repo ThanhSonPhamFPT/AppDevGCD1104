@@ -1,9 +1,10 @@
 ﻿using AppDevGCD1104.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppDevGCD1104.Data
 {
-    public class ApplicationDBContext:DbContext
+    public class ApplicationDBContext:IdentityDbContext
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Book> Books { get; set; }
