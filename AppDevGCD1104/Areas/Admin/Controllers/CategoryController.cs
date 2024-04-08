@@ -2,11 +2,13 @@
 using AppDevGCD1104.Models;
 using AppDevGCD1104.Repository;
 using AppDevGCD1104.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppDevGCD1104.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
